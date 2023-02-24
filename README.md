@@ -1,5 +1,6 @@
-# cpm_test
+# Description
 
+Note that this code only performs training under the proposed CPM loss (in addition to the cross-entropy loss) and excludes the calculation of the true collision probability, i.e., the test-retest reliability, and the final epsilon value as the true collision probability minus the resulting CPM-bound predictive collision probability.
 This is a sample implementation of the collision probability matching (CPM), including:
 
 - Training code 
@@ -7,10 +8,11 @@ This is a sample implementation of the collision probability matching (CPM), inc
 
 
 ## Paper
-Paper is here: http://aistats.org/aistats2023/  
-We will update the document url after publish the following AISTATS 2023 proceedings.
+Our AISTATS 2023 paper can be viewed from http://aistats.org/aistats2023/  
+The url will be updated after the paper is published on AISTATS 2023 proceedings.
 
-Cite the following article to refer to this work.
+
+To cite this paper:
 ```BibTex
 @inproceedings{narimatsu2023collision,
   title={Collision Probability Matching Loss for Disentangling Epistemic Uncertainty from Aleatoric Uncertainty},
@@ -25,28 +27,44 @@ Cite the following article to refer to this work.
 Use `train.py` to run the code.
 `python train.py 
 To change the following parameters, you can use these arguments:
-* `--inputs data/sampledata_sample50img.csv`
-* `--action_units data/stim_list_withAUs.csv` (It is used as features.)
+* `--inputs data/labels.csv`
+* `--features data/features.csv` (It is used as features.)
 * `--weight 100000`
 * `--seed 123`
 * `--output output_dir`
 * `--num_epochs 100`
 
+### Output results
+This code output the measures as the following format:
+`train | count:1 | epoch:001/100 | lr:2.000000e-04 | accuracy:0.0925 | ccp:0.1967 | cp:0.2006 | diff:1.964208e-05 | conf:0.2164 | cost:3.5913 | cost1:1.9642 | cost2:1.6271`  
 
-## Dataset Examples
+* lr: learning rate
+* accuracy: machine accuracy
+* ccp: cross collision probability
+* cp: predictive collision probability
+* diff: squared error of cp - ccp 
+* conf: machine confidence 
+* cost: final loss 
+* cost1: cpm loss
+* cost2: cross entropy loss
+
+If ccp=cp is not satisfied with at least two significant digits, please increase the weight (e.g., by 10 times). Their discrepancy tends to lead to a large error in the estimated epsilon.
+
+
+## Dataset examples
 Sample data is included in the data directory. (We will also upload the sample data soon.)
-* `stim_list_withAUs.csv`: This file is used as a feature. This sample contains the Action Unit information obtained using OpenFace [1] by inputting each image.  
+* `labels.csv: This file includes a set of synthesized labels of 50 virtual respondents to 50 images on a 5-point scale. Note that this is different from the dataset used in our AISTATS 2023 paper.`  
   Data format:
-  `[feature_id, feat1, feat2, feat3, ..., featN]`
-* `sampledata_sample50img.csv`: This is a sample of the input data created to run this sample code. It simulates the score that a respondent gives to a target image on a 5-point scale. 50 images with 50 resopondents are included in the dataset. (Note that this data is different from the one used in the experiment of our paper.)  
+  `[image_id, feat1, feat2, feat3, ..., featN]`
+
+* `features.csv: This file includes a set of features of the 50 images. They are the action units obtained using OpenFace [1] for each image.`  
   Data format:  
- `[subject_id, feature_id, V1, V2, V3, V4, V5, response]`
-
- The two files can be mapped by feature_id. 
+ `[subject_id, image_id, V1, V2, V3, V4, V5, response]`
 
 
-## Software version
-Codes are confirmed to run with the following libraries. Likely to be compatible with newer versions. 
+
+## Verified software versions?
+This code was tested on the following libraries.
 
 * `Python`: `3.9.12`
 * `torch`: `1.12.1`
