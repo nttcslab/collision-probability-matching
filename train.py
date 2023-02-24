@@ -251,13 +251,13 @@ def make_dataloaders(args):
 	import pandas as pd
 	import os, sys, math
 	
-	if not os.path.exists(args.action_units):
+	if not os.path.exists(args.features):
 		printm(args.log,
-			   "could not find action units file: %s" % args.action_units,
+			   "could not find featire file: %s" % args.features,
 			   file=sys.stderr)
 		sys.exit(1)
 	try:
-		aus = pd.read_csv(args.action_units)
+		aus = pd.read_csv(args.features)
 	except Exception as e:
 		printm(args.log, e, file=sys.stderr)
 		sys.exit(1)
@@ -677,10 +677,10 @@ def main():
 						action="version", version=version,
 						help="show version information"
 						)
-	parser.add_argument("--action_units", "-a", dest="action_units",
+	parser.add_argument("--featires", "-a", dest="features",
 						type=str, nargs=1,
-						default=["data/stim_list_withAUs.csv"],
-						help="action unit file path"
+						default=["data/features.csv"],
+						help="feature file path"
 						)
 	parser.add_argument("--output", "-o", dest="output_dir",
 						type=str, default=["output"], nargs=1,
@@ -688,7 +688,7 @@ def main():
 						)
 	parser.add_argument("--inputs", "-r", dest="inputs",
 						type=str, nargs=1,
-						default=["data/sampledata_sample50img_trial0.csv"],
+						default=["data/labels.csv"],
 						help="ratings file path"
 						)
 	parser.add_argument("--num_classes", "-c",
