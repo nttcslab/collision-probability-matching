@@ -1,9 +1,9 @@
 # cpm_test
 
-This is a sample implementation of the collision probability matching (CPM), includes:
+This is a sample implementation of the collision probability matching (CPM), including:
 
 - Training code 
-- Sample dataset for run the code
+- Sample dataset for running the code
 
 
 ## Paper
